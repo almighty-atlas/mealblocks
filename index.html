@@ -26,7 +26,7 @@
             <p class="step">01</p>
             <h2 id="builder-title">Baue deine Portion</h2>
           </div>
-          <button class="ghost-button" id="randomize" type="button">Zufällig</button>
+          <button class="ghost-button" id="randomize" type="button">Passendes Meal</button>
         </div>
 
         <div class="targets">
@@ -44,6 +44,58 @@
               <span>g+</span>
             </div>
           </label>
+        </div>
+
+        <div class="preference-box">
+          <div class="preference-heading">
+            <div>
+              <strong>Vorrat & Vorlieben</strong>
+              <small>Optional · bleibt lokal in diesem Browser gespeichert</small>
+            </div>
+            <button class="text-button" id="reset-preferences" type="button">Zurücksetzen</button>
+          </div>
+
+          <label class="toggle-row compact-toggle">
+            <input id="pantry-toggle" type="checkbox" />
+            <span>
+              <strong>Nur Gemüse aus meinem Vorrat verwenden</strong>
+              <small>„Passendes Meal“ und die Gemüseauswahl berücksichtigen dann nur markierte Sorten.</small>
+            </span>
+          </label>
+
+          <div id="pantry-panel" class="preference-section" hidden>
+            <div class="mini-heading">
+              <span>Gemüse zu Hause</span>
+              <div>
+                <button class="text-button" id="pantry-all" type="button">Alle</button>
+                <button class="text-button" id="pantry-none" type="button">Keine</button>
+              </div>
+            </div>
+            <div id="pantry-vegetable-chips" class="chips preference-chips"></div>
+          </div>
+
+          <details class="dislikes">
+            <summary>Was ich nicht mag</summary>
+            <p class="preference-help">Ausgeschlossene Zutaten werden aus Auswahl und Generator entfernt.</p>
+            <div class="dislike-groups">
+              <div>
+                <h3>Proteinquellen</h3>
+                <div id="dislike-proteins" class="chips preference-chips"></div>
+              </div>
+              <div>
+                <h3>Kohlenhydrate</h3>
+                <div id="dislike-carbs" class="chips preference-chips"></div>
+              </div>
+              <div>
+                <h3>Gemüse</h3>
+                <div id="dislike-vegetables" class="chips preference-chips"></div>
+              </div>
+              <div>
+                <h3>Geschmack</h3>
+                <div id="dislike-flavors" class="chips preference-chips"></div>
+              </div>
+            </div>
+          </details>
         </div>
 
         <div class="select-grid">
