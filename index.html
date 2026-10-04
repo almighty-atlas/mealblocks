@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f1e8" />
+    <meta
+      name="description"
+      content="Mealblocks – ein minimalistischer veganer Meal Builder für einfache, proteinreiche Ofengerichte."
+    />
+    <title>Mealblocks</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">VEGAN MEAL BUILDER</p>
+        <h1>Mealblocks</h1>
+        <p class="intro">Protein + Carbs + Gemüse + Geschmack. Fertig.</p>
+      </header>
+
+      <section class="card builder" aria-labelledby="builder-title">
+        <div class="section-heading">
+          <div>
+            <p class="step">01</p>
+            <h2 id="builder-title">Baue deine Portion</h2>
+          </div>
+          <button class="ghost-button" id="randomize" type="button">Zufällig</button>
+        </div>
+
+        <div class="targets">
+          <label>
+            <span>Kalorien</span>
+            <div class="input-with-unit">
+              <input id="calorie-target" type="number" min="350" max="900" step="25" value="500" />
+              <span>kcal</span>
+            </div>
+          </label>
+          <label>
+            <span>Protein</span>
+            <div class="input-with-unit">
+              <input id="protein-target" type="number" min="20" max="70" step="5" value="30" />
+              <span>g+</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="select-grid">
+          <label>
+            <span>Proteinquelle</span>
+            <select id="protein-select"></select>
+          </label>
+          <label>
+            <span>Kohlenhydrate</span>
+            <select id="carb-select"></select>
+          </label>
+          <label class="wide">
+            <span>Geschmack</span>
+            <select id="flavor-select"></select>
+          </label>
+        </div>
+
+        <fieldset class="vegetable-picker">
+          <legend>Gemüse <span>300 g gesamt · 1–4 Sorten</span></legend>
+          <div id="vegetable-chips" class="chips"></div>
+        </fieldset>
+
+        <label class="toggle-row">
+          <input id="oil-toggle" type="checkbox" checked />
+          <span>
+            <strong>5 g Öl einplanen</strong>
+            <small>≈ 44 kcal, bereits in der Berechnung enthalten</small>
+          </span>
+        </label>
+
+        <button class="primary-button" id="generate" type="button">Meal berechnen</button>
+      </section>
+
+      <section class="card result" id="result-card" aria-live="polite">
+        <div class="result-topline">
+          <div>
+            <p class="step">02</p>
+            <h2 id="meal-title">Dein Meal</h2>
+          </div>
+          <button class="favorite-button" id="favorite" type="button" aria-label="Als Favorit speichern">♡</button>
+        </div>
+
+        <div class="macros">
+          <div><strong id="result-kcal">—</strong><span>kcal</span></div>
+          <div><strong id="result-protein">—</strong><span>g Protein</span></div>
+        </div>
+        <p class="status" id="target-status"></p>
+
+        <div class="result-grid">
+          <div>
+            <div class="subheading-row">
+              <h3>Zutaten</h3>
+              <div class="portion-switch" aria-label="Portionsgröße">
+                <button type="button" data-scale="1" class="active">×1</button>
+                <button type="button" data-scale="4">×4</button>
+              </div>
+            </div>
+            <ul id="ingredient-list" class="clean-list"></ul>
+          </div>
+          <div>
+            <h3>Würzung</h3>
+            <ul id="spice-list" class="clean-list spices"></ul>
+          </div>
+        </div>
+
+        <p class="note">Nährwerte sind Näherungswerte. Für exaktes Tracking einmal mit deinen konkreten Produkten abgleichen.</p>
+      </section>
+
+      <section class="card favorites" id="favorites-card" hidden>
+        <div class="section-heading compact">
+          <div>
+            <p class="step">03</p>
+            <h2>Favoriten</h2>
+          </div>
+          <button class="ghost-button danger" id="clear-favorites" type="button">Leeren</button>
+        </div>
+        <div id="favorites-list" class="favorites-list"></div>
+      </section>
+
+      <footer>
+        <span>Mealblocks</span>
+        <span>Vegan · glutenfrei auswählbar · lokal im Browser</span>
+      </footer>
+    </main>
+  </body>
+</html>
