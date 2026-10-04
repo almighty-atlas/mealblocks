@@ -428,3 +428,107 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
 }
+
+
+.field-help {
+  display: block;
+  margin: 8px 2px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.reference details {
+  border-top: 1px solid var(--line);
+}
+
+.reference details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.reference summary {
+  padding: 16px 0;
+  cursor: pointer;
+  font-weight: 800;
+  list-style-position: outside;
+}
+
+.reference-note {
+  margin: -4px 0 18px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.legend-groups {
+  display: grid;
+  gap: 24px;
+  padding: 2px 0 22px;
+}
+
+.legend-group h3 {
+  margin-bottom: 8px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.legend-group table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.legend-group th,
+.legend-group td {
+  padding: 9px 8px;
+  border-bottom: 1px solid #ebe9e1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.legend-group th:first-child,
+.legend-group td:first-child {
+  padding-left: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.legend-group th {
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.flavor-guide {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 2px 0 22px;
+}
+
+.flavor-guide-item {
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #faf9f4;
+}
+
+.flavor-guide-item strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.88rem;
+}
+
+.flavor-guide-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 680px) {
+  .flavor-guide { grid-template-columns: 1fr; }
+}
