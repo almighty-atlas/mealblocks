@@ -9,12 +9,16 @@ Pick a protein source, carbohydrate, 1–4 vegetables and a flavor profile. Meal
 - Default target: **500 kcal / 30 g+ protein**
 - Vegan ingredient set
 - Gluten-free carb and seasoning choices
-- 12 flavor profiles
+- 16 flavor profiles with short explanations
+- 11 protein sources, 11 carbohydrate sources and 29 vegetables
 - 300 g vegetables per serving
 - Automatic portion calculation
+- Pantry mode for vegetables currently at home
+- Persistent dislike filters for proteins, carbs, vegetables and flavor profiles
+- Smart meal generator that searches allowed combinations near the calorie/protein target
 - ×1 / ×4 meal-prep view
-- Random meal generator
 - Favorites stored locally in the browser
+- Nutrition reference per 100 g
 - No account, backend, analytics or external API
 
 ## Nutrition data
@@ -39,7 +43,7 @@ The repository includes a GitHub Pages workflow. Every push to `main` deploys th
 
 ## Privacy
 
-Favorites are stored only in `localStorage` in the current browser.
+Favorites, pantry settings and dislikes are stored only in `localStorage` in the current browser.
 
 ## License
 
