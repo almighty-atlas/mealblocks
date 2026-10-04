@@ -4,7 +4,11 @@ const DATA = {
     { id: "tofu", name: "Tofu natur", kcal: 145, protein: 16, min: 120, max: 320, step: 10, preferred: 180 },
     { id: "smoked-tofu", name: "Räuchertofu", kcal: 170, protein: 19, min: 120, max: 280, step: 10, preferred: 160 },
     { id: "tempeh", name: "Tempeh", kcal: 195, protein: 20, min: 100, max: 260, step: 10, preferred: 150 },
-    { id: "edamame", name: "Edamame", kcal: 122, protein: 12.1, min: 160, max: 360, step: 10, preferred: 220 }
+    { id: "edamame", name: "Edamame", kcal: 122, protein: 12.1, min: 160, max: 360, step: 10, preferred: 220 },
+    { id: "kidney-beans", name: "Kidneybohnen (gekocht)", kcal: 127, protein: 8.7, min: 180, max: 380, step: 10, preferred: 260 },
+    { id: "black-beans", name: "Schwarze Bohnen (gekocht)", kcal: 132, protein: 8.9, min: 180, max: 380, step: 10, preferred: 260 },
+    { id: "chickpeas", name: "Kichererbsen (gekocht)", kcal: 164, protein: 8.9, min: 160, max: 330, step: 10, preferred: 230 },
+    { id: "lentils", name: "Linsen (gekocht)", kcal: 116, protein: 9.0, min: 180, max: 400, step: 10, preferred: 260 }
   ],
   carbs: [
     { id: "potato", name: "Kartoffeln", kcal: 77, protein: 2, min: 100, max: 450, step: 10, preferred: 250 },
@@ -26,21 +30,26 @@ const DATA = {
     { id: "eggplant", name: "Aubergine", kcal: 25, protein: 1.0 },
     { id: "pumpkin", name: "Kürbis", kcal: 26, protein: 1.0 },
     { id: "onion", name: "Zwiebeln", kcal: 40, protein: 1.1 },
-    { id: "fennel", name: "Fenchel", kcal: 31, protein: 1.2 }
+    { id: "fennel", name: "Fenchel", kcal: 31, protein: 1.2 },
+    { id: "corn", name: "Mais", kcal: 86, protein: 3.4 },
+    { id: "peas", name: "Erbsen", kcal: 81, protein: 5.4 },
+    { id: "cherry-tomatoes", name: "Cherrytomaten", kcal: 18, protein: 0.9 },
+    { id: "red-cabbage", name: "Rotkohl", kcal: 31, protein: 1.4 },
+    { id: "asparagus", name: "Spargel", kcal: 20, protein: 2.2 }
   ],
   flavors: [
-    { id: "smoky-bbq", name: "Smoky BBQ", spices: ["2 TL geräucherte Paprika", "1 TL Knoblauchpulver", "½ TL Zwiebelpulver", "Chili, Pfeffer & Salz"] },
-    { id: "mediterranean", name: "Mediterran", spices: ["1 TL Oregano", "1 TL Basilikum", "½ TL Rosmarin", "Knoblauch, Zitrone, Pfeffer & Salz"] },
-    { id: "mexican", name: "Mexikanisch", spices: ["1 TL Kreuzkümmel", "1 TL Paprika", "½ TL Oregano", "Chili, Knoblauch & Limette"] },
-    { id: "curry", name: "Curry", spices: ["2 TL Currypulver", "½ TL Kreuzkümmel", "½ TL Kurkuma", "Ingwer, Knoblauch & Salz"] },
-    { id: "tandoori", name: "Tandoori", spices: ["1 TL Garam Masala", "1 TL Paprika", "½ TL Kreuzkümmel", "Ingwer, Knoblauch & Zitronensaft"] },
-    { id: "shawarma", name: "Shawarma", spices: ["1 TL Kreuzkümmel", "1 TL Koriander", "1 TL Paprika", "Knoblauch & 1 Prise Zimt"] },
-    { id: "harissa", name: "Harissa", spices: ["1–2 TL Harissa", "½ TL Kreuzkümmel", "Knoblauch & Zitronensaft", "Salz nach Geschmack"] },
-    { id: "teriyaki", name: "Teriyaki-ish", spices: ["1 EL glutenfreies Tamari", "Ingwer & Knoblauch", "1 TL Reisessig", "Etwas Süße nach Geschmack"] },
-    { id: "miso-sesame", name: "Miso-Sesam", spices: ["1 TL glutenfreies Miso", "1 TL glutenfreies Tamari", "Ingwer & Reisessig", "1 TL Sesam"] },
-    { id: "lemon-pepper", name: "Lemon Pepper", spices: ["Viel schwarzer Pfeffer", "Knoblauch", "Zitronensaft & -abrieb", "Petersilie & Salz"] },
-    { id: "herbs", name: "Kräuter-Knoblauch", spices: ["Petersilie & Dill", "Schnittlauch", "Knoblauch", "Zitrone, Pfeffer & Salz"] },
-    { id: "umami", name: "Umami", spices: ["1 EL glutenfreies Tamari", "1 TL glutenfreies Miso", "Knoblauch & Pfeffer", "Pilzpulver nach Geschmack"] }
+    { id: "smoky-bbq", name: "Smoky BBQ", description: "Rauchig, herzhaft und paprika-lastig; erinnert an BBQ ohne süße Sauce.", spices: ["2 TL geräucherte Paprika", "1 TL Knoblauchpulver", "½ TL Zwiebelpulver", "Chili, Pfeffer & Salz"] },
+    { id: "mediterranean", name: "Mediterran", description: "Kräutrig, zitronig und frisch mit Oregano, Basilikum und Rosmarin.", spices: ["1 TL Oregano", "1 TL Basilikum", "½ TL Rosmarin", "Knoblauch, Zitrone, Pfeffer & Salz"] },
+    { id: "mexican", name: "Mexikanisch", description: "Warm-würzig, leicht rauchig und frisch durch Kreuzkümmel, Chili und Limette.", spices: ["1 TL Kreuzkümmel", "1 TL Paprika", "½ TL Oregano", "Chili, Knoblauch & Limette"] },
+    { id: "curry", name: "Curry", description: "Wärmend und aromatisch mit klassischer Currywürze, Kurkuma, Ingwer und Knoblauch.", spices: ["2 TL Currypulver", "½ TL Kreuzkümmel", "½ TL Kurkuma", "Ingwer, Knoblauch & Salz"] },
+    { id: "tandoori", name: "Tandoori", description: "Indisch inspiriert, kräftig-würzig und leicht säuerlich mit Garam Masala und Zitrone.", spices: ["1 TL Garam Masala", "1 TL Paprika", "½ TL Kreuzkümmel", "Ingwer, Knoblauch & Zitronensaft"] },
+    { id: "shawarma", name: "Shawarma", description: "Levantinisch inspiriert: warm, würzig und leicht erdig mit Kreuzkümmel, Koriander und einer Spur Zimt.", spices: ["1 TL Kreuzkümmel", "1 TL Koriander", "1 TL Paprika", "Knoblauch & 1 Prise Zimt"] },
+    { id: "harissa", name: "Harissa", description: "Nordafrikanisch inspiriert, deutlich pikant, würzig und zitronig.", spices: ["1–2 TL Harissa", "½ TL Kreuzkümmel", "Knoblauch & Zitronensaft", "Salz nach Geschmack"] },
+    { id: "teriyaki", name: "Teriyaki-ish", description: "Japanisch inspiriert, salzig-süß mit Soja, Ingwer und einer milden Säure.", spices: ["1 EL glutenfreies Tamari", "Ingwer & Knoblauch", "1 TL Reisessig", "Etwas Süße nach Geschmack"] },
+    { id: "miso-sesame", name: "Miso-Sesam", description: "Nussig, salzig und umami-reich mit Miso, Sesam und Tamari.", spices: ["1 TL glutenfreies Miso", "1 TL glutenfreies Tamari", "Ingwer & Reisessig", "1 TL Sesam"] },
+    { id: "lemon-pepper", name: "Lemon Pepper", description: "Sehr frisch und zitronig mit deutlicher Pfefferschärfe.", spices: ["Viel schwarzer Pfeffer", "Knoblauch", "Zitronensaft & -abrieb", "Petersilie & Salz"] },
+    { id: "herbs", name: "Kräuter-Knoblauch", description: "Mild, frisch und kräutrig; eine unkomplizierte Alltagsmischung.", spices: ["Petersilie & Dill", "Schnittlauch", "Knoblauch", "Zitrone, Pfeffer & Salz"] },
+    { id: "umami", name: "Umami", description: "Tief herzhaft und würzig mit Miso, Tamari und Pilzaromen.", spices: ["1 EL glutenfreies Tamari", "1 TL glutenfreies Miso", "Knoblauch & Pfeffer", "Pilzpulver nach Geschmack"] }
   ]
 };
 
@@ -74,7 +83,10 @@ const el = {
   favorite: document.querySelector("#favorite"),
   favoritesCard: document.querySelector("#favorites-card"),
   favoritesList: document.querySelector("#favorites-list"),
-  clearFavorites: document.querySelector("#clear-favorites")
+  clearFavorites: document.querySelector("#clear-favorites"),
+  flavorDescription: document.querySelector("#flavor-description"),
+  nutritionLegend: document.querySelector("#nutrition-legend"),
+  flavorGuide: document.querySelector("#flavor-guide")
 };
 
 function option(item) {
@@ -97,6 +109,37 @@ function nutrition(item, grams) {
 
 function selectedVegetables() {
   return state.vegetables.map(function (id) { return byId(DATA.vegetables, id); });
+}
+
+function renderFlavorDescription() {
+  const flavor = byId(DATA.flavors, el.flavor.value);
+  el.flavorDescription.textContent = flavor ? flavor.description : "";
+}
+
+function renderNutritionLegend() {
+  const groups = [
+    ["Proteinquellen", DATA.proteins],
+    ["Kohlenhydrate", DATA.carbs],
+    ["Gemüse", DATA.vegetables]
+  ];
+
+  el.nutritionLegend.innerHTML = groups.map(function (group) {
+    const rows = group[1].map(function (item) {
+      return "<tr><td>" + item.name + "</td><td>" + item.kcal + " kcal</td><td>" +
+        String(item.protein).replace(".", ",") + " g</td></tr>";
+    }).join("");
+
+    return "<div class=\"legend-group\"><h3>" + group[0] + "</h3>" +
+      "<div class=\"table-scroll\"><table><thead><tr><th>Zutat</th><th>kcal</th><th>Protein</th></tr></thead>" +
+      "<tbody>" + rows + "</tbody></table></div></div>";
+  }).join("");
+}
+
+function renderFlavorGuide() {
+  el.flavorGuide.innerHTML = DATA.flavors.map(function (flavor) {
+    return "<div class=\"flavor-guide-item\"><strong>" + flavor.name + "</strong><p>" +
+      flavor.description + "</p></div>";
+  }).join("");
 }
 
 function vegetableNutrition() {
@@ -277,6 +320,7 @@ function randomize() {
   el.protein.value = randomItem(DATA.proteins).id;
   el.carb.value = randomItem(DATA.carbs).id;
   el.flavor.value = randomItem(DATA.flavors).id;
+  renderFlavorDescription();
 
   const shuffled = DATA.vegetables.slice().sort(function () { return Math.random() - 0.5; });
   const count = 2 + Math.floor(Math.random() * 2);
@@ -343,6 +387,7 @@ function applyFavorite(meal) {
   el.protein.value = meal.proteinId;
   el.carb.value = meal.carbId;
   el.flavor.value = meal.flavorId;
+  renderFlavorDescription();
   el.oil.checked = meal.oil;
   el.calories.value = meal.calorieTarget;
   el.proteinTarget.value = meal.proteinTarget;
@@ -394,13 +439,21 @@ function init() {
   el.flavor.value = "smoky-bbq";
 
   setupVegetables();
+  renderNutritionLegend();
+  renderFlavorGuide();
+  renderFlavorDescription();
 
   el.generate.addEventListener("click", calculateMeal);
   el.randomize.addEventListener("click", randomize);
   el.favorite.addEventListener("click", toggleFavorite);
 
-  [el.protein, el.carb, el.flavor, el.calories, el.proteinTarget, el.oil].forEach(function (control) {
+  [el.protein, el.carb, el.calories, el.proteinTarget, el.oil].forEach(function (control) {
     control.addEventListener("change", calculateMeal);
+  });
+
+  el.flavor.addEventListener("change", function () {
+    renderFlavorDescription();
+    calculateMeal();
   });
 
   document.querySelectorAll("[data-scale]").forEach(function (button) {
