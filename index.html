@@ -58,6 +58,7 @@
           <label class="wide">
             <span>Geschmack</span>
             <select id="flavor-select"></select>
+            <small class="field-help" id="flavor-description"></small>
           </label>
         </div>
 
@@ -112,10 +113,30 @@
         <p class="note">Nährwerte sind Näherungswerte. Für exaktes Tracking einmal mit deinen konkreten Produkten abgleichen.</p>
       </section>
 
-      <section class="card favorites" id="favorites-card" hidden>
+      <section class="card reference" aria-labelledby="reference-title">
         <div class="section-heading compact">
           <div>
             <p class="step">03</p>
+            <h2 id="reference-title">Nachschlagen</h2>
+          </div>
+        </div>
+
+        <details>
+          <summary>Nährwert-Legende pro 100 g</summary>
+          <p class="reference-note">Die Werte sind Näherungswerte. „Trocken“ bzw. „gekocht“ steht direkt beim Lebensmittel.</p>
+          <div id="nutrition-legend" class="legend-groups"></div>
+        </details>
+
+        <details>
+          <summary>Geschmacksrichtungen erklärt</summary>
+          <div id="flavor-guide" class="flavor-guide"></div>
+        </details>
+      </section>
+
+      <section class="card favorites" id="favorites-card" hidden>
+        <div class="section-heading compact">
+          <div>
+            <p class="step">04</p>
             <h2>Favoriten</h2>
           </div>
           <button class="ghost-button danger" id="clear-favorites" type="button">Leeren</button>
