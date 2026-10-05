@@ -41,7 +41,7 @@
             <span>Protein</span>
             <div class="input-with-unit">
               <input id="protein-target" type="number" min="20" max="70" step="5" value="30" />
-              <span>g+</span>
+              <span>g ±5</span>
             </div>
           </label>
         </div>
@@ -154,15 +154,18 @@
                 <button type="button" data-scale="4">×4</button>
               </div>
             </div>
+            <p class="reference-note">Mengen für die angezeigten Portionen ändern: Protein ↔ Kohlenhydrate gleichen die Kalorien aus. Bei Gemüse, Öl und Würzung werden die Kohlenhydrate angepasst. Protein-Abweichungen werden angezeigt. „Berechnen“ setzt die Mengen zurück.</p>
             <ul id="ingredient-list" class="clean-list"></ul>
           </div>
           <div>
             <h3>Würzung</h3>
             <ul id="spice-list" class="clean-list spices"></ul>
+            <div class="seasoning-add"><select id="seasoning-select" aria-label="Weitere Würzzutat"></select><button id="add-seasoning" type="button">Hinzufügen</button></div>
+            <p id="seasoning-guide" class="reference-note"></p>
           </div>
         </div>
 
-        <p class="note">Nährwerte sind Näherungswerte. Für exaktes Tracking einmal mit deinen konkreten Produkten abgleichen.</p>
+        <p class="note">Nährwerte inklusive Würzung sind Näherungswerte. Miso, Saucen und Gewürzmischungen unterscheiden sich je nach Produkt. Mengen oben anpassen und für exaktes Tracking die Packungswerte abgleichen.</p>
       </section>
 
       <section class="card reference" aria-labelledby="reference-title">

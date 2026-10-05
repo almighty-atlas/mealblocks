@@ -78,6 +78,54 @@ const DATA = {
   ]
 };
 
+// Representative seasoning values per 100 g; miso reference: ARCHE Shiro Miso.
+const SEASONINGS = [
+  { id: "miso", name: "Glutenfreie Miso-Paste", kcal: 179, protein: 7.6, grams: 7 },
+  { id: "tamari", name: "Glutenfreies Tamari", kcal: 60, protein: 10, grams: 15 },
+  { id: "sesame", name: "Sesam", kcal: 573, protein: 18, grams: 3 },
+  { id: "sugar", name: "Zucker", kcal: 400, protein: 0, grams: 4 },
+  { id: "harissa", name: "Harissa-Paste", kcal: 100, protein: 2, grams: 10 },
+  { id: "mustard", name: "Glutenfreier Senf", kcal: 100, protein: 6, grams: 5 },
+  { id: "zaatar", name: "Za’atar", kcal: 400, protein: 12, grams: 5 },
+  { id: "spice-mix", name: "Trockene Gewürze / Kräuter", kcal: 300, protein: 10, grams: 5 },
+  { id: "garlic", name: "Knoblauch", kcal: 149, protein: 6.4, grams: 3 },
+  { id: "ginger", name: "Ingwer", kcal: 80, protein: 1.8, grams: 3 },
+  { id: "lemon", name: "Zitronen- / Limettensaft", kcal: 22, protein: 0.4, grams: 10 },
+  { id: "vinegar", name: "Reisessig", kcal: 20, protein: 0, grams: 5 },
+  { id: "mushroom-powder", name: "Pilzpulver", kcal: 300, protein: 25, grams: 2 }
+];
+
+function defaultSeasonings(flavor) {
+  const recipes = {
+    "smoky-bbq": [["spice-mix", 9]],
+    mediterranean: [["spice-mix", 2], ["garlic", 3], ["lemon", 10]],
+    mexican: [["spice-mix", 5], ["garlic", 3], ["lemon", 10]],
+    curry: [["spice-mix", 7], ["garlic", 3], ["ginger", 3]],
+    tandoori: [["spice-mix", 5], ["garlic", 3], ["ginger", 3], ["lemon", 10]],
+    shawarma: [["spice-mix", 7], ["garlic", 3]],
+    harissa: [["harissa", 10], ["spice-mix", 1], ["garlic", 3], ["lemon", 10]],
+    teriyaki: [["tamari", 15], ["garlic", 3], ["ginger", 3], ["vinegar", 5], ["sugar", 4]],
+    "miso-sesame": [["miso", 7], ["tamari", 5], ["ginger", 3], ["vinegar", 5], ["sesame", 3]],
+    "lemon-pepper": [["spice-mix", 2], ["garlic", 3], ["lemon", 15]],
+    herbs: [["spice-mix", 2], ["garlic", 3], ["lemon", 10]],
+    umami: [["miso", 7], ["tamari", 15], ["garlic", 3], ["spice-mix", 1], ["mushroom-powder", 2]],
+    cajun: [["spice-mix", 6]],
+    "ras-el-hanout": [["spice-mix", 5], ["garlic", 3], ["lemon", 10]],
+    zaatar: [["zaatar", 5], ["garlic", 3], ["lemon", 10]],
+    "mustard-herbs": [["mustard", 5], ["spice-mix", 2], ["garlic", 3], ["lemon", 10]]
+  };
+  return (recipes[flavor.id] || []).map(function (entry) { return { id: entry[0], grams: entry[1] }; });
+}
+
+function seasoningNutrition(entries) {
+  return entries.reduce(function (sum, entry) {
+    const values = nutrition(byId(SEASONINGS, entry.id), entry.grams);
+    sum.kcal += values.kcal;
+    sum.protein += values.protein;
+    return sum;
+  }, { kcal: 0, protein: 0 });
+}
+
 const OIL = { name: "Öl", grams: 5, kcal: 884, protein: 0 };
 const VEG_TOTAL = 300;
 const favoriteStorageKey = "mealblocks-favorites-v1";
@@ -162,7 +210,15 @@ function nutrition(item, grams) {
 }
 
 function loadFavorites() {
-  try { return JSON.parse(localStorage.getItem(favoriteStorageKey) || "[]"); }
+  try {
+    const saved = JSON.parse(localStorage.getItem(favoriteStorageKey) || "[]");
+    if (!Array.isArray(saved)) return [];
+    return saved.map(function (meal) {
+      meal.seasonings = meal.seasonings || defaultSeasonings(byId(DATA.flavors, meal.flavorId));
+      recalculateTotals(meal);
+      return meal;
+    });
+  }
   catch { return []; }
 }
 
@@ -207,7 +263,8 @@ function renderNutritionLegend() {
   const groups = [
     ["Proteinquellen", DATA.proteins],
     ["Kohlenhydrate", DATA.carbs],
-    ["Gemüse", DATA.vegetables]
+    ["Gemüse", DATA.vegetables],
+    ["Würzung (Richtwerte)", SEASONINGS]
   ];
 
   el.nutritionLegend.innerHTML = groups.map(function (group) {
@@ -315,12 +372,13 @@ function vegetableNutrition(vegetables) {
 
 function scoreCandidate(candidate, calorieTarget, proteinTarget, proteinSource, carbSource) {
   const calorieDifference = Math.abs(candidate.kcal - calorieTarget);
-  const proteinShortfall = Math.max(0, proteinTarget - candidate.protein);
-  const proteinSurplus = Math.max(0, candidate.protein - proteinTarget);
+  const outsideRange = Math.max(0, Math.abs(candidate.protein - proteinTarget) - 5);
   const portionPenalty =
     Math.abs(candidate.proteinGrams - proteinSource.preferred) * 0.025 +
     Math.abs(candidate.carbGrams - carbSource.preferred) * 0.015;
-  return calorieDifference * 2 + proteinShortfall * 150 + proteinSurplus * 0.15 + portionPenalty;
+  // Prefer the requested protein band, then calories, then its center.
+  return (outsideRange > 1e-9 ? 1000000 : 0) + outsideRange * 10000 + calorieDifference * 2 +
+    Math.abs(candidate.protein - proteinTarget) * 0.5 + portionPenalty;
 }
 
 function buildMeal(proteinSource, carbSource, flavor, vegetables, calorieTarget, proteinTarget, useOil) {
@@ -328,17 +386,21 @@ function buildMeal(proteinSource, carbSource, flavor, vegetables, calorieTarget,
 
   const vegetableValues = vegetableNutrition(vegetables);
   const oilValues = useOil ? nutrition(OIL, OIL.grams) : { kcal: 0, protein: 0 };
+  const seasonings = defaultSeasonings(flavor);
+  const seasoningValues = seasoningNutrition(seasonings);
+  const carbMax = Math.max(carbSource.max, Math.min(carbSource.max * 2,
+    Math.ceil(calorieTarget * 100 / carbSource.kcal / carbSource.step) * carbSource.step));
   let best = null;
 
-  for (let proteinGrams = proteinSource.min; proteinGrams <= proteinSource.max; proteinGrams += proteinSource.step) {
-    for (let carbGrams = carbSource.min; carbGrams <= carbSource.max; carbGrams += carbSource.step) {
+  for (let proteinGrams = proteinSource.step; proteinGrams <= proteinSource.max; proteinGrams += proteinSource.step) {
+    for (let carbGrams = carbSource.min; carbGrams <= carbMax; carbGrams += carbSource.step) {
       const p = nutrition(proteinSource, proteinGrams);
       const c = nutrition(carbSource, carbGrams);
       const candidate = {
         proteinGrams: proteinGrams,
         carbGrams: carbGrams,
-        kcal: p.kcal + c.kcal + vegetableValues.kcal + oilValues.kcal,
-        protein: p.protein + c.protein + vegetableValues.protein + oilValues.protein
+        kcal: p.kcal + c.kcal + vegetableValues.kcal + oilValues.kcal + seasoningValues.kcal,
+        protein: p.protein + c.protein + vegetableValues.protein + oilValues.protein + seasoningValues.protein
       };
       candidate.score = scoreCandidate(candidate, calorieTarget, proteinTarget, proteinSource, carbSource);
       if (!best || candidate.score < best.score) best = candidate;
@@ -351,6 +413,7 @@ function buildMeal(proteinSource, carbSource, flavor, vegetables, calorieTarget,
     flavorId: flavor.id,
     vegetableIds: vegetables.map(function (item) { return item.id; }),
     oil: useOil,
+    seasonings: seasonings,
     calorieTarget: calorieTarget,
     proteinTarget: proteinTarget,
     proteinGrams: best.proteinGrams,
@@ -402,20 +465,80 @@ function mealName(meal) {
   return (flavor ? flavor.name : "Meal") + " · " + (protein ? protein.name : "Protein");
 }
 
-function ingredientRows(meal) {
-  const scale = state.scale;
+function mealRows(meal) {
   const rows = [
-    [byId(DATA.proteins, meal.proteinId).name, meal.proteinGrams * scale],
-    [byId(DATA.carbs, meal.carbId).name, meal.carbGrams * scale]
+    { key: "protein", item: byId(DATA.proteins, meal.proteinId), grams: meal.proteinGrams },
+    { key: "carb", item: byId(DATA.carbs, meal.carbId), grams: meal.carbGrams }
   ];
-
   meal.vegetableIds.forEach(function (id) {
-    const vegetable = byId(DATA.vegetables, id);
-    if (vegetable) rows.push([vegetable.name, meal.vegetableGramsEach * scale]);
+    rows.push({ key: "veg:" + id, item: byId(DATA.vegetables, id),
+      grams: meal.vegetableGrams?.[id] ?? meal.vegetableGramsEach });
   });
-
-  if (meal.oil) rows.push([OIL.name, OIL.grams * scale]);
+  if (meal.oil) rows.push({ key: "oil", item: OIL, grams: meal.oilGrams ?? OIL.grams });
+  (meal.seasonings || []).forEach(function (entry) {
+    rows.push({ key: "seasoning:" + entry.id, item: byId(SEASONINGS, entry.id), grams: entry.grams });
+  });
   return rows;
+}
+
+function recalculateTotals(meal) {
+  meal.kcal = 0;
+  meal.protein = 0;
+  mealRows(meal).forEach(function (row) {
+    const values = nutrition(row.item, row.grams);
+    meal.kcal += values.kcal;
+    meal.protein += values.protein;
+  });
+}
+
+function setMealAmount(meal, key, grams) {
+  if (key === "protein") meal.proteinGrams = grams;
+  else if (key === "carb") meal.carbGrams = grams;
+  else if (key === "oil") meal.oilGrams = grams;
+  else if (key.startsWith("veg:")) {
+    meal.vegetableGrams = meal.vegetableGrams || {};
+    meal.vegetableGrams[key.slice(4)] = grams;
+  } else {
+    const entry = meal.seasonings.find(function (entry) { return entry.id === key.slice(10); });
+    if (entry) entry.grams = grams;
+  }
+}
+
+function rebalanceMeal(meal, changedKey, displayedGrams, scale) {
+  if (!Number.isFinite(displayedGrams) || displayedGrams < 0) return false;
+  setMealAmount(meal, changedKey, displayedGrams / scale);
+  recalculateTotals(meal);
+  const balanceKey = changedKey === "carb" ? "protein" : "carb";
+  const row = mealRows(meal).find(function (row) { return row.key === balanceKey; });
+  // Keep the user's amount; only the counterpart compensates calories.
+  const grams = Math.max(0, row.grams + (meal.calorieTarget - meal.kcal) * 100 / row.item.kcal);
+  setMealAmount(meal, balanceKey, Math.round(grams * 10) / 10);
+  recalculateTotals(meal);
+  return true;
+}
+
+function renderAmountRow(row, container) {
+  const li = document.createElement("li");
+  const label = document.createElement("label");
+  label.className = "amount-row";
+  const name = document.createElement("span");
+  name.textContent = row.item.name;
+  const amount = document.createElement("span");
+  amount.className = "amount-control";
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = "0";
+  input.step = row.key === "protein" || row.key === "carb" ? "5" : "1";
+  input.value = String(Math.round(row.grams * state.scale * 10) / 10);
+  input.setAttribute("aria-label", row.item.name + " in Gramm für " + state.scale + " Portionen");
+  input.addEventListener("change", function () {
+    if (input.value.trim() && rebalanceMeal(state.meal, row.key, Number(input.value), state.scale)) renderMeal();
+    else input.value = String(Math.round(row.grams * state.scale * 10) / 10);
+  });
+  amount.append(input, document.createTextNode(" g"));
+  label.append(name, amount);
+  li.append(label);
+  container.append(li);
 }
 
 function renderMeal() {
@@ -427,31 +550,37 @@ function renderMeal() {
   el.proteinResult.textContent = (meal.protein * state.scale).toFixed(1).replace(".", ",");
 
   const kcalDelta = Math.round(meal.kcal - meal.calorieTarget);
-  const proteinOkay = meal.protein >= meal.proteinTarget;
+  const proteinOkay = Math.abs(meal.protein - meal.proteinTarget) <= 5 + 1e-9;
   const calorieOkay = Math.abs(kcalDelta) <= 15;
 
   el.status.className = "status " + (proteinOkay && calorieOkay ? "good" : "warn");
   if (proteinOkay && calorieOkay) {
     el.status.textContent = "Ziel getroffen · " + (kcalDelta >= 0 ? "+" : "") + kcalDelta + " kcal";
   } else if (!proteinOkay) {
-    el.status.textContent = "Mit dieser Kombination sind " + meal.proteinTarget + " g Protein im sinnvollen Portionsbereich nicht erreichbar.";
+    el.status.textContent = "Protein außerhalb des Zielbereichs " + (meal.proteinTarget - 5) + "–" + (meal.proteinTarget + 5) + " g pro Portion · " + (kcalDelta >= 0 ? "+" : "") + kcalDelta + " kcal. Mengen anpassen oder Kombination wechseln.";
   } else {
     el.status.textContent = "Nächste sinnvolle Portion · " + (kcalDelta >= 0 ? "+" : "") + kcalDelta + " kcal zum Ziel";
   }
 
   el.ingredients.innerHTML = "";
-  ingredientRows(meal).forEach(function (row) {
-    const li = document.createElement("li");
-    li.innerHTML = "<span>" + row[0] + "</span><span class=\"amount\">" + Math.round(row[1]) + " g</span>";
-    el.ingredients.append(li);
-  });
-
   el.spices.innerHTML = "";
-  byId(DATA.flavors, meal.flavorId).spices.forEach(function (spice) {
-    const li = document.createElement("li");
-    li.textContent = state.scale === 4 ? "×4 · " + spice : spice;
-    el.spices.append(li);
+  mealRows(meal).forEach(function (row) {
+    renderAmountRow(row, row.key.startsWith("seasoning:") ? el.spices : el.ingredients);
   });
+  const flavor = byId(DATA.flavors, meal.flavorId);
+  document.querySelector("#seasoning-guide").textContent = "Würzidee: " + flavor.spices.join(" · ") +
+    ". Berechnet werden die Gramm-Mengen oben; Salz nach Geschmack.";
+  const seasoningSelect = document.querySelector("#seasoning-select");
+  seasoningSelect.innerHTML = "";
+  SEASONINGS.filter(function (item) {
+    return !(meal.seasonings || []).some(function (entry) { return entry.id === item.id; });
+  }).forEach(function (item) {
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent = item.name;
+    seasoningSelect.append(option);
+  });
+  document.querySelector("#add-seasoning").disabled = !seasoningSelect.options.length;
 
   document.querySelectorAll("[data-scale]").forEach(function (button) {
     button.classList.toggle("active", Number(button.dataset.scale) === state.scale);
@@ -517,7 +646,12 @@ function favoriteSignature(meal) {
     meal.vegetableIds.slice().sort().join(","),
     meal.oil,
     meal.calorieTarget,
-    meal.proteinTarget
+    meal.proteinTarget,
+    meal.proteinGrams,
+    meal.carbGrams,
+    JSON.stringify(meal.vegetableGrams || {}),
+    meal.oilGrams ?? OIL.grams,
+    JSON.stringify(meal.seasonings || [])
   ].join("|");
 }
 
@@ -578,7 +712,11 @@ function applyFavorite(meal) {
   state.vegetables = meal.vegetableIds.slice();
   renderVegetableChoices();
   renderFlavorDescription();
-  calculateMeal();
+  state.meal = JSON.parse(JSON.stringify(meal));
+  state.meal.seasonings = state.meal.seasonings || defaultSeasonings(byId(DATA.flavors, meal.flavorId));
+  state.scale = 1;
+  recalculateTotals(state.meal);
+  renderMeal();
   document.querySelector("#result-card").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -637,6 +775,15 @@ function init() {
   renderFlavorGuide();
   renderPreferenceControls();
   refreshBuilder();
+
+  document.querySelector("#add-seasoning").addEventListener("click", function () {
+    if (!state.meal) return;
+    const item = byId(SEASONINGS, document.querySelector("#seasoning-select").value);
+    if (!item || state.meal.seasonings.some(function (entry) { return entry.id === item.id; })) return;
+    state.meal.seasonings.push({ id: item.id, grams: 0 });
+    rebalanceMeal(state.meal, "seasoning:" + item.id, item.grams * state.scale, state.scale);
+    renderMeal();
+  });
 
   el.generate.addEventListener("click", calculateMeal);
   el.randomize.addEventListener("click", smartGenerate);

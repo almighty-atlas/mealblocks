@@ -672,3 +672,11 @@ footer {
     background: rgba(147, 79, 71, 0.18);
   }
 }
+
+.amount-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.amount-row > span:first-child { min-width: 0; }
+.amount-control { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.amount-control input { width: 82px; min-width: 0; padding: 7px; text-align: right; }
+.seasoning-add { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.seasoning-add select { flex: 1; min-width: 150px; }
+.seasoning-add button { padding: 8px 12px; }
