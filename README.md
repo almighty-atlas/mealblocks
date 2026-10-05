@@ -8,9 +8,9 @@ Pick a protein source, carbohydrate, 1–4 vegetables and a flavor profile. Meal
 
 - Default target: **500 kcal / 30 g+ protein**
 - Vegan ingredient set
-- Gluten-free carb and seasoning choices
+- Gluten-free carb and seasoning choices, with label guidance for gnocchi
 - 16 flavor profiles with short explanations
-- 11 protein sources, 11 carbohydrate sources and 29 vegetables
+- 11 protein sources, 13 carbohydrate sources and 29 vegetables
 - 300 g vegetables per serving
 - Automatic portion calculation
 - Pantry mode for vegetables currently at home
@@ -26,6 +26,8 @@ Pick a protein source, carbohydrate, 1–4 vegetables and a flavor profile. Meal
 Nutrition values are representative values per 100 g and intentionally kept simple. Brand-specific products can differ considerably, especially tofu, tempeh and soy products.
 
 For precise calorie tracking, compare the generated meal once against the nutrition labels of the products you actually use.
+
+Gnocchi portions refer to fresh product weight before cooking. The generic gnocchi entry uses [Bürger Kartoffel-Gnocchi](https://www.buerger.de/produkte/kartoffel-gnocchi-500g) as its nutrition reference (147 kcal / 2.2 g protein per 100 g). The preferred sweet-potato variant is [Bürger Gnocchi mit Süßkartoffel](https://www.buerger.de/produkte/gnocchi-mit-suesskartoffel-500g) (148 kcal / 2.4 g protein per 100 g). Manufacturer values checked on October 5, 2026. Both products are vegan but may contain traces of gluten; generic gnocchi can also contain wheat or egg, so check the chosen product's label.
 
 ## Development
 

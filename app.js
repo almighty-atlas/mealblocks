@@ -15,6 +15,8 @@ const DATA = {
   carbs: [
     { id: "potato", name: "Kartoffeln", kcal: 77, protein: 2, min: 100, max: 450, step: 10, preferred: 250 },
     { id: "sweet-potato", name: "Süßkartoffeln", kcal: 86, protein: 1.6, min: 100, max: 400, step: 10, preferred: 220 },
+    { id: "gnocchi", name: "Gnocchi (frisch)", kcal: 147, protein: 2.2, min: 80, max: 300, step: 10, preferred: 150 },
+    { id: "sweet-potato-gnocchi", name: "Gnocchi mit Süßkartoffel (Bürger, frisch)", kcal: 148, protein: 2.4, min: 80, max: 300, step: 10, preferred: 150 },
     { id: "rice", name: "Reis (trocken)", kcal: 360, protein: 7.2, min: 25, max: 120, step: 5, preferred: 55 },
     { id: "wild-rice", name: "Wildreis (trocken)", kcal: 357, protein: 14.7, min: 25, max: 110, step: 5, preferred: 50 },
     { id: "quinoa", name: "Quinoa (trocken)", kcal: 368, protein: 14.1, min: 25, max: 110, step: 5, preferred: 50 },
